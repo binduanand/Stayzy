@@ -1,0 +1,87 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2">
+    <h3 class="mb-3">Edit your Listing</h3>
+    <form
+      action="/stays/<%=stayToEdit._id%>?_method=PUT"
+      method="post"
+      class="border rounded p-3 mb-3 needs-validation"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          name="stay[title]"
+          value="<%= stayToEdit.title %>"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Title Required</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="stay[description]" class="form-control" required>
+<%= stayToEdit.description %></textarea
+        >
+        <div class="invalid-feedback">Description Required</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Image Link</label>
+        <input
+          type="text"
+          name="stay[image][url]"
+          value="<%= stayToEdit.image.url %>"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Image URL Required</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input
+          type="number"
+          name="stay[price]"
+          value="<%= stayToEdit.price%>"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Price Required</div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              name="stay[location]"
+              value="<%= stayToEdit.location%>"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Location Required</div>
+          </div>
+        </div>
+        <div class="mb-3 col-md-6">
+          <div class="mb-3">
+            <label for="state" class="form-label">State</label>
+            <input
+              type="text"
+              name="stay[state]"
+              value="<%= stayToEdit.state %>"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">State Required</div>
+          </div>
+        </div>
+      </div>
+      <button class="mb-3 btn editBtn blueBtn col-12">Edit</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<% layout("/layouts/boilerplate") %>
+
+<h3 class="pt-3 mb-3">Explore Stays</h3>
+
+<div class="row row-cols-lg-4 row-cols-sm-2 row-cols-1">
+  <% for(let stay of allStays){ %>
+  <a href="/stays/<%=stay._id%>" class="listing-link">
+    <div class="card col">
+      <img src="<%=stay.image.url%>" class="card-img-top" alt="stay_image" />
+      <div class="card-img-overlay"></div>
+      <div class="card-body ps-0">
+        <p class="card-text">
+          <b><%=stay.title%></b><br />
+          &#8377;<%=stay.price.toLocaleString("en-IN")%> / night <br />
+          <%=stay.location%>, <%=stay.state%>
+        </p>
+      </div>
+    </div>
+  </a>
+
+  <%}%>
+</div>

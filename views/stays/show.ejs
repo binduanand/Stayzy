@@ -1,0 +1,97 @@
+<% layout("/layouts/boilerplate") %>
+<div class="container stayContainer">
+  <div class="row mb-3 mt-2">
+    <div class="col-10">
+      <h3 class="showheading mt-2"><%= stay.title%></h3>
+      <div class="card">
+        <img
+          src="<%= stay.image.url%>"
+          class="card-img-top showImage"
+          alt="stay-image"
+        />
+        <div class="card-body pl-0 showCardBody">
+          <p class="card-text stayDesc">
+            <b>Host : <%= stay.owner.username%></b><br />
+            <%= stay.description%><br /><br />
+            &#8377;<%= stay.price.toLocaleString("en-IN")%> / night <br />
+            <%= stay.location%> , <%= stay.state%><br />
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reviewContainer col-12">
+      <h4 class="mb-4">Reviews</h4>
+      <div class="allReviews">
+        <% for( review of stay.reviews) { %>
+        <div class="card reviewItem">
+          <p class="card-title"><b>@<%= review.author.username %></b></p>
+          <div class="card-body ps-0 pt-0 reviewCardBody">
+            <% for(let i = 0 ; i < review.rating; i++) { %>
+            <span><i class="fa-solid fa-star"></i></span>
+            <% } %>
+            <br />
+            <p><%= review.comment %></p>
+            <% if(review.author._id.equals(currUser._id)) { %>
+            <form
+              action="/stays/<%= stay._id%>/reviews/<%= review._id%>?_method=DELETE"
+              method="post"
+            >
+              <button class="deleteReviewBtn">Delete</button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="showBtns mt-5 col-4">
+    <% if(currUser && currUser._id.equals(stay.owner._id)) { %>
+    <div>
+      <a href="/stays/<%= stay._id %>/edit" class="btn mb-3 blueBtn"
+        >Edit listing</a
+      >
+
+      <form action="/stays/<%= stay._id %>?_method=DELETE" method="POST">
+        <button class="btn blueBtn deleteBtn" type="submit">
+          Delete listing
+        </button>
+      </form>
+    </div>
+    <% } %> <% if(currUser) { %>
+    <div class="border rounded mt-3 p-2">
+      <h5>Leave a Review</h5>
+      <form
+        action="/stays/<%= stay._id %>/reviews"
+        method="post"
+        novalidate
+        class="needs-validation"
+      >
+        <div>
+          <label for="rating" class="form-label">Rating</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            id="rating"
+            name="review[rating]"
+            class="form-range"
+          />
+        </div>
+        <div>
+          <label for="comment" class="form-label">Comments</label>
+          <textarea
+            name="review[comment]"
+            id="comment"
+            class="form-control mb-2"
+            required
+          ></textarea>
+        </div>
+        <button class="btn btn-outline-dark revBtn">Submit</button>
+      </form>
+    </div>
+    <% } %>
+  </div>
+</div>

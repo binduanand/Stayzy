@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><i class="fa-brands fa-staylinked"></i></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse pb-3" id="navbarNavAltMarkup">
+      <div class="navbar-nav mt-2">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/stays">Explore Stays</a>
+        <a class="nav-link" href="/stays/new">List your Space</a>
+      </div>
+      <% if (!currUser) { %>
+      <div class="logSignBtn me-2">
+        <a href="/login">LogIn </a>
+        <a href="/signup"> SignUp</a>
+      </div>
+      <% } else { %>
+      <div class="logSignBtn">
+        <a href="/logout">LogOut</a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</nav>

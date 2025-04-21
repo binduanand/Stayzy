@@ -1,9 +1,10 @@
-# Stayzy - Stay Rental Platform
+# 🏡 Stayzy - Stay Rental Platform
 
 
 Stayzy is a vacation rental platform designed to allow users to search for, list, and manage properties. It features secure authentication, image storage with Cloudinary, and form validation using Joi. This platform allows hosts to list their properties and travelers to find the perfect place to stay.
 
 🚀**Technologies Used:**
+
 **-Node.js:** Backend server framework.
 
 **-Express.js:** Web application framework for routing.
@@ -14,7 +15,8 @@ Stayzy is a vacation rental platform designed to allow users to search for, list
 
 **-MongoDB/Mongoose:** Database and ORM for managing stays and user data.
 
-🚀**Features**
+🚀**Features** 
+
 -🔐**User Authentication:** Secure login and signup using Passport.js. 
 
 -🖼️**Image Uploading:** Upload property images directly to Cloudinary.
@@ -27,7 +29,8 @@ Stayzy is a vacation rental platform designed to allow users to search for, list
 
 -💻**Server-Side** Rendering: Render dynamic content with EJS templates.
 
-**🛠️ Installation**
+**🛠️ Installation** 
+
 1. Clone the repository:
    git clone https://github.com/binduanand/Stayzy.git
    
@@ -54,7 +57,12 @@ Stayzy is a vacation rental platform designed to allow users to search for, list
 8. Start the app:
    node app.js
 
+## 💡 Usage
 
+- Sign up or log in as a user.
+- Add new stay listings with images, price, and location.
+- Filter or search stays by category.
+- Admin can delete listings and manage users.
 
 
 

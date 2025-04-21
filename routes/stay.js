@@ -13,6 +13,8 @@ const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
 
+const { cloudinary } = require("../cloudConfig.js");
+
 //validate data using joi
 const validateListing = (req, res, next) => {
   const result = joiStaySchema.validate(req.body);
@@ -61,8 +63,11 @@ router
     wrapAsync(async (req, res, next) => {
       const { path: url, filename } = req.file;
       const newStay = new Stay(req.body.stay);
+      
+
       newStay.owner = req.user._id;
       newStay.image = { url, filename };
+
       await newStay.save();
       req.flash("success", "New Listing Created");
       res.redirect("/stays");
@@ -142,6 +147,11 @@ router
     isOwner,
     wrapAsync(async (req, res) => {
       let { id } = req.params;
+
+      const stay = await Stay.findById(id);
+      if (stay.image && stay.image.filename) {
+        await cloudinary.uploader.destroy(stay.image.filename);
+      }
 
       await Stay.findByIdAndDelete(id);
       req.flash("success", "Listing Deleted");

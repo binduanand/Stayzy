@@ -35,6 +35,7 @@ const staysSchema = new mongoose.Schema({
   category: {
     type: [String],
     enum: ["mountain", "beach", "trending", "city", "snow", "luxe"],
+    default: []
   },
 });
 

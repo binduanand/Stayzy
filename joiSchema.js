@@ -11,8 +11,7 @@ module.exports.joiStaySchema = Joi.object({
     category: Joi.array()
       .items(
         Joi.string().valid("mountain", "beach", "trending", "city", "snow", "luxe")
-      )
-      .required(),
+      ),
     image: Joi.object({
       url: Joi.string().allow("", null),
     }),

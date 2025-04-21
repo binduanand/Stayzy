@@ -11,14 +11,19 @@ Stayzy is a vacation rental platform designed to allow users to search for, list
 -MongoDB/Mongoose: Database and ORM for managing stays and user data.
 
 🚀**Features**
--🔐**User Authentication:** Secure login and signup using Passport.js.
+-🔐**User Authentication:** Secure login and signup using Passport.js. 
+
 -🖼️**Image Uploading:** Upload property images directly to Cloudinary.
+
 -🔍**Search and Filter:** Search properties based on categories (e.g., mountain, beach, city, etc.).
+
 -✅**Validation:** Input validation for stays using Joi.
+
 -✨**Responsive Design:** Fully responsive UI using Bootstrap.
+
 -💻**Server-Side** Rendering: Render dynamic content with EJS templates.
 
-** 🛠️ Installation**
+**🛠️ Installation**
 1. Clone the repository:
    git clone https://github.com/binduanand/Stayzy.git
 2. Navigate to the project directory:
@@ -35,8 +40,7 @@ Stayzy is a vacation rental platform designed to allow users to search for, list
 5. Start the app:
    node app.js
 
-**📸 Screenshots**
-![Home]("C:\Users\Bindu Anand\Pictures\Screenshots\Screenshot (14).png")
+
 
 
 

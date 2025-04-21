@@ -6,12 +6,12 @@ const { saveRedirectUrl } = require("../middleware.js");
 
 const User = require("../models/user.js");
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
 
-router.post(
-  "/signup",
+router.route("/signup")
+.get((req, res) => {
+  res.render("users/signup.ejs");
+})
+.post(
   saveRedirectUrl,
   wrapAsync(async (req, res) => {
     try {
@@ -33,12 +33,12 @@ router.post(
   })
 );
 
-router.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
 
-router.post(
-  "/login",
+router.route("/login")
+.get( (req, res) => {
+  res.render("users/login.ejs");
+})
+.post(
   saveRedirectUrl,
   passport.authenticate("local", {
     failureRedirect: "/login",
@@ -51,6 +51,8 @@ router.post(
   }
 );
 
+
+
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -60,5 +62,6 @@ router.get("/logout", (req, res, next) => {
     res.redirect("/stays");
   });
 });
+
 
 module.exports = router;

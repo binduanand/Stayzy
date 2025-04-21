@@ -13,7 +13,8 @@
           <p class="card-text stayDesc">
             <b>Host : <%= stay.owner.username%></b><br />
             <%= stay.description%><br /><br />
-            &#8377;<%= stay.price.toLocaleString("en-IN")%> / night <br />
+            &#8377;<%= stay.price.toLocaleString("en-IN")%> / night
+            <br />
             <%= stay.location%> , <%= stay.state%><br />
           </p>
         </div>
@@ -21,18 +22,19 @@
     </div>
 
     <div class="reviewContainer col-12">
-      <h4 class="mb-4">Reviews</h4>
+      <h4 class="mb-4 revTitle">Reviews</h4>
       <div class="allReviews">
         <% for( review of stay.reviews) { %>
         <div class="card reviewItem">
-          <p class="card-title"><b>@<%= review.author.username %></b></p>
+          <p class="card-title mb-0"><b>@<%= review.author.username %></b></p>
           <div class="card-body ps-0 pt-0 reviewCardBody">
             <% for(let i = 0 ; i < review.rating; i++) { %>
             <span><i class="fa-solid fa-star"></i></span>
             <% } %>
             <br />
             <p><%= review.comment %></p>
-            <% if(review.author._id.equals(currUser._id)) { %>
+            <% if(review.author && currUser &&
+            review.author._id.equals(currUser._id)) { %>
             <form
               action="/stays/<%= stay._id%>/reviews/<%= review._id%>?_method=DELETE"
               method="post"
@@ -47,12 +49,12 @@
     </div>
   </div>
 
-  <div class="showBtns mt-5 col-4">
+  <div class="showBtns mt-5 col-5 col-lg-4">
     <% if(currUser && currUser._id.equals(stay.owner._id)) { %>
     <div>
       <a href="/stays/<%= stay._id %>/edit" class="btn mb-3 blueBtn"
-        >Edit listing</a
-      >
+        >Edit listing
+      </a>
 
       <form action="/stays/<%= stay._id %>?_method=DELETE" method="POST">
         <button class="btn blueBtn deleteBtn" type="submit">
@@ -60,7 +62,7 @@
         </button>
       </form>
     </div>
-    <% } %> <% if(currUser) { %>
+    <% } %>
     <div class="border rounded mt-3 p-2">
       <h5>Leave a Review</h5>
       <form
@@ -70,15 +72,52 @@
         class="needs-validation"
       >
         <div>
-          <label for="rating" class="form-label">Rating</label>
-          <input
-            type="range"
-            min="1"
-            max="5"
-            id="rating"
-            name="review[rating]"
-            class="form-range"
-          />
+          <fieldset class="starability-basic mt-3">
+            <input
+              type="radio"
+              id="no-rate"
+              class="input-no-rate"
+              name="review[rating]"
+              value="1"
+              checked
+              aria-label="No rating."
+            />
+            <input
+              type="radio"
+              id="second-rate1"
+              name="review[rating]"
+              value="1"
+            />
+            <label for="second-rate1" title="Terrible">1 star</label>
+            <input
+              type="radio"
+              id="second-rate2"
+              name="review[rating]"
+              value="2"
+            />
+            <label for="second-rate2" title="Not good">2 stars</label>
+            <input
+              type="radio"
+              id="second-rate3"
+              name="review[rating]"
+              value="3"
+            />
+            <label for="second-rate3" title="Average">3 stars</label>
+            <input
+              type="radio"
+              id="second-rate4"
+              name="review[rating]"
+              value="4"
+            />
+            <label for="second-rate4" title="Very good">4 stars</label>
+            <input
+              type="radio"
+              id="second-rate5"
+              name="review[rating]"
+              value="5"
+            />
+            <label for="second-rate5" title="Amazing">5 stars</label>
+          </fieldset>
         </div>
         <div>
           <label for="comment" class="form-label">Comments</label>
@@ -89,9 +128,40 @@
             required
           ></textarea>
         </div>
-        <button class="btn btn-outline-dark revBtn">Submit</button>
+        <button class="btn btn-outline-dark revBtn p-1 p-lg-2">Submit</button>
       </form>
     </div>
-    <% } %>
+    <% if (currUser) { %>
+    <form
+      action="/stays/<%=stay._id%>/book"
+      method="post"
+      class="mt-5 p-2 pt-3 mb-3 border rounded"
+    >
+      <h5 class="mb-3">Book Stay</h5>
+      <label for="checkIn">Pick your check-in date</label>
+      <input
+        type="text"
+        class="form-control mb-2"
+        name="booking[checkIn]"
+        id="checkIn"
+        placeholder="Select Date.."
+        required
+      />
+
+      <label for="checkOut">Pick your check-out date</label>
+      <input
+        type="text"
+        class="form-control mb-2"
+        name="booking[checkOut]"
+        id="checkOut"
+        placeholder="Select Date.."
+        required
+      />
+
+      <button class="btn btn-outline-dark">Book</button>
+    </form>
+    <% } else { %>
+    <h5 class="mt-4">Please Login To Book Stay!</h5>
+    <%} %>
   </div>
 </div>

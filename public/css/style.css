@@ -5,14 +5,12 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Wrapper takes the full height of the viewport */
 .wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensures the wrapper stretches to fill the entire screen height */
+  min-height: 100vh;
 }
 
-/* Content section will take up all available space */
 .content {
   flex: 1;
 }
@@ -36,14 +34,14 @@ body {
   background-color: white;
 }
 
-.logSignBtn {
-  display: flex;
-  flex-direction: column;
+.searchBar {
+  position: absolute;
+  left: 35%;
+  top: 20px;
 }
-.logSignBtn a {
-  text-decoration: none;
-  color: black;
-  margin-top: 0.8rem;
+.searchBtn {
+  background-color: rgb(27, 27, 216) !important;
+  color: white !important;
 }
 
 @media (min-width: 767px) {
@@ -53,12 +51,43 @@ body {
     justify-content: space-between;
   }
 
-  .logSignBtn {
-    width: 10%;
-    flex-direction: row;
-    justify-content: space-between;
+  .searchBar {
+    left: 45%;
   }
 }
+
+@media (max-width: 578px) {
+  .searchInput {
+    width: 30% !important;
+    padding: 0 !important;
+  }
+
+  .searchInput::placeholder {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+}
+
+/* filters */
+.filters {
+  display: flex;
+  justify-content: space-between;
+}
+.fiterBtn {
+  display: flex !important;
+  flex-direction: column !important;
+  font-size: 0.8rem;
+  color: rgba(32, 31, 31, 0.767);
+  background-color: white;
+  border: none;
+}
+
+.fiterBtn:hover {
+  color: black;
+  transform: scale(1.1);
+}
+
+
 
 /*Footer*/
 
@@ -82,6 +111,12 @@ body {
 
 .f-info-socials {
   font-size: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .f-info * {
+    font-size: 0.8rem;
+  }
 }
 
 /* cards */
@@ -142,12 +177,15 @@ body {
     font-size: 0.7rem !important;
   }
   .reviewItem p,
-  .reviewCardBody {
-    font-size: 0.7rem !important;
+  .reviewCardBody,
+  .stayDesc,
+  .revBtn {
+    font-size: 0.6rem !important;
   }
 
-  .stayDesc {
-    font-size: 0.8rem !important;
+  .showheading,
+  .revTitle {
+    font-size: 1rem !important;
   }
 }
 
@@ -164,6 +202,7 @@ body {
 
 .fa-star {
   color: rgb(243, 232, 84);
+  font-size: 0.6rem;
 }
 
 .deleteReviewBtn {
@@ -174,4 +213,16 @@ body {
 /* error.ejs */
 .alert {
   text-align: center;
+}
+
+
+/* booking.ejs */
+.bookingItem{
+  display: flex;
+}
+
+@media(max-width:320px){
+  .bookingItemInfo{
+    font-size: 0.7rem !important;
+  }
 }

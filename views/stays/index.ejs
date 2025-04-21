@@ -1,6 +1,35 @@
 <% layout("/layouts/boilerplate") %>
 
-<h3 class="pt-3 mb-3">Explore Stays</h3>
+<form action="/stays" method="get" class="filters pt-3">
+  <button type="submit" name="filter" value="trending" class="fiterBtn">
+    <i class="fa-solid fa-fire-flame-curved"></i> Trending
+  </button>
+
+  <button type="submit" name="filter" value="mountain" class="fiterBtn">
+    <i class="fa-solid fa-mountain-sun"></i> Mountain
+  </button>
+
+  <button type="submit" name="filter" value="beach" class="fiterBtn">
+    <i class="fa-solid fa-umbrella-beach"></i> Beach
+  </button>
+
+  <button type="submit" name="filter" value="city" class="fiterBtn">
+    <i class="fa-solid fa-building"></i> City
+  </button>
+
+  <button type="submit" name="filter" value="snow" class="fiterBtn">
+    <i class="fa-solid fa-snowflake"></i> Snow
+  </button>
+
+  <button type="submit" name="filter" value="luxe" class="fiterBtn">
+    <i class="fa-solid fa-money-check-dollar"></i> Luxe
+  </button>
+</form>
+
+
+  <h3 class="mb-3 mt-4">Explore Stays</h3>
+ 
+
 
 <div class="row row-cols-lg-4 row-cols-sm-2 row-cols-1">
   <% for(let stay of allStays){ %>
@@ -13,6 +42,7 @@
           <b><%=stay.title%></b><br />
           &#8377;<%=stay.price.toLocaleString("en-IN")%> / night <br />
           <%=stay.location%>, <%=stay.state%>
+          <br>
         </p>
       </div>
     </div>

@@ -8,6 +8,7 @@
       method="post"
       class="border rounded p-3 mb-3 needs-validation"
       novalidate
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -30,15 +31,16 @@
       </div>
 
       <div class="mb-3">
-        <label for="image" class="form-label">Image Link</label>
-        <input
-          type="text"
-          name="stay[image][url]"
-          value="<%= stayToEdit.image.url %>"
-          class="form-control"
-          required
+        <img
+          src="<%= stayToEdit.image.url%>"
+          width="40%"
+          height="100px"
+          class="src"
         />
-        <div class="invalid-feedback">Image URL Required</div>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload new Image</label>
+        <input type="file" name="stay[image]" class="form-control" />
       </div>
 
       <div class="mb-3">

@@ -9,6 +9,10 @@ const ExpressError = require("../utils/ExpressError.js");
 
 const { joiStaySchema } = require("../joiSchema.js");
 
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
+
 //validate data using joi
 const validateListing = (req, res, next) => {
   const result = joiStaySchema.validate(req.body);
@@ -20,14 +24,50 @@ const validateListing = (req, res, next) => {
   }
 };
 
-//explore stays
-router.get(
-  "/",
-  wrapAsync(async (req, res) => {
-    const allStays = await Stay.find({});
-    res.render("stays/index.ejs", { allStays });
-  })
-);
+router
+  .route("/")
+  .get(
+    //explore stays
+    wrapAsync(async (req, res) => {
+      let { filter, q } = req.query;
+      let query = {};
+      if (filter) {
+        query.category = { $in: [filter] };
+      }
+
+      if (q) {
+        query.$or = [
+          { state: { $regex: q, $options: "i" } }, 
+          { location: { $regex: q, $options: "i" } }, 
+          { description: { $regex: q, $options: "i" } }, 
+        ];
+      }
+
+      const allStays = await Stay.find(query);
+      if (allStays.length === 0) {
+        return res.render("stays/index.ejs", {
+          allStays,
+          noResults: true  
+        });
+      }
+
+      res.render("stays/index.ejs", { allStays});
+    })
+  )
+  .post(
+    isLoggedIn,
+    upload.single("stay[image]"),
+    validateListing,
+    wrapAsync(async (req, res, next) => {
+      const { path: url, filename } = req.file;
+      const newStay = new Stay(req.body.stay);
+      newStay.owner = req.user._id;
+      newStay.image = { url, filename };
+      await newStay.save();
+      req.flash("success", "New Listing Created");
+      res.redirect("/stays");
+    })
+  );
 
 //add newstay form
 router.get(
@@ -35,20 +75,6 @@ router.get(
   isLoggedIn,
   wrapAsync(async (req, res) => {
     res.render("stays/new.ejs");
-  })
-);
-
-//create route
-router.post(
-  "/",
-  isLoggedIn,
-  validateListing,
-  wrapAsync(async (req, res, next) => {
-    const newStay = new Stay(req.body.stay);
-    newStay.owner = req.user._id;
-    await newStay.save();
-    req.flash("success", "New Listing Created");
-    res.redirect("/stays");
   })
 );
 
@@ -68,55 +94,59 @@ router.get(
   })
 );
 
-//update listing
-router.put(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  validateListing,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Stay.findByIdAndUpdate(id, { ...req.body.stay });
-    req.flash("success", "Listing Updated");
-    res.redirect(`/stays/${id}`);
-  })
-);
+router
+  .route("/:id")
+  .get(
+    //show individual stay
+    wrapAsync(async (req, res) => {
+      const { id } = req.params;
+      const stay = await Stay.findById(id)
+        .populate({
+          path: "reviews",
+          populate: {
+            path: "author",
+          },
+        })
+        .populate("owner");
 
-//show stay
-router.get(
-  "/:id",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const stay = await Stay.findById(id)
-      .populate({
-        path: "reviews",
-        populate: {
-          path: "author",
-        },
-      })
-      .populate("owner");
+      if (!stay) {
+        req.flash("error", "Listing Does Not Exist");
+        res.redirect("/stays");
+      }
 
-    if (!stay) {
-      req.flash("error", "Listing Does Not Exist");
+      res.render("stays/show.ejs", { stay });
+    })
+  )
+  .put(
+    //update listing
+    isLoggedIn,
+    isOwner,
+    upload.single("stay[image]"),
+    validateListing,
+    wrapAsync(async (req, res) => {
+      let { id } = req.params;
+      let stay = await Stay.findByIdAndUpdate(id, { ...req.body.stay });
+
+      if (typeof req.file !== "undefined") {
+        const { path: url, filename } = req.file;
+        stay.image = { url, filename };
+        await stay.save();
+      }
+      req.flash("success", "Listing Updated");
+      res.redirect(`/stays/${id}`);
+    })
+  )
+  .delete(
+    //delete stay
+    isLoggedIn,
+    isOwner,
+    wrapAsync(async (req, res) => {
+      let { id } = req.params;
+
+      await Stay.findByIdAndDelete(id);
+      req.flash("success", "Listing Deleted");
       res.redirect("/stays");
-    }
-
-    res.render("stays/show.ejs", { stay });
-  })
-);
-
-//delete stay
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-
-    await Stay.findByIdAndDelete(id);
-    req.flash("success", "Listing Deleted");
-    res.redirect("/stays");
-  })
-);
+    })
+  );
 
 module.exports = router;

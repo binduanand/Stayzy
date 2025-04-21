@@ -8,8 +8,6 @@ const Review = require("../models/review.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 
-const { joiReviewSchema } = require("../joiSchema.js");
-
 //validate review using joi
 const validateReview = (req, res, next) => {
   const result = joiReviewSchema.validate(req.body);
@@ -21,6 +19,8 @@ const validateReview = (req, res, next) => {
   }
 };
 
+
+
 //create review
 router.post(
   "/",
@@ -31,7 +31,6 @@ router.post(
     let stay = await Stay.findById(id);
     let newReview = new Review(req.body.review);
     newReview.author = req.user._id;
-
     stay.reviews.push(newReview);
     await newReview.save();
     await stay.save();
@@ -54,3 +53,5 @@ router.delete(
 );
 
 module.exports = router;
+const { joiReviewSchema } = require("../joiSchema.js");
+

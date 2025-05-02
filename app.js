@@ -6,7 +6,6 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -19,12 +18,15 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
+const wrapAsync = require("./utils/wrapAsync.js");
+
 const staysRouter = require("./routes/stay.js");
 const reviewsRouter = require("./routes/review.js");
 const usersRouter = require("./routes/user.js");
-const bookingRouter = require("./routes/booking.js")
+const bookingRouter = require("./routes/booking.js");
 
 const User = require("./models/user.js");
+const Stay = require("./models/stays.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -32,8 +34,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
-
-
 
 //connect to mongodb
 // const MONGO_URL = "mongodb://127.0.0.1:27017/stayzy";
@@ -51,18 +51,17 @@ async function main() {
   await mongoose.connect(dbUrl);
 }
 
-
 const store = MongoStore.create({
   mongoUrl: dbUrl,
-  crypto : {
+  crypto: {
     secret: process.env.SECRET,
-  } ,
-  touchAfter : 24 * 3600,
+  },
+  touchAfter: 24 * 3600,
 });
 
-store.on("error", ()=> {
-  console.log("Error in mongo session store",err);
-})
+store.on("error", () => {
+  console.log("Error in mongo session store", err);
+});
 
 const sessionOptions = {
   store,
@@ -76,11 +75,8 @@ const sessionOptions = {
   },
 };
 
-
-
 app.use(session(sessionOptions));
 app.use(flash());
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -95,6 +91,35 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get(
+  "/",
+  //explore stays
+  wrapAsync(async (req, res) => {
+    let { filter, q } = req.query;
+    let query = {};
+    if (filter) {
+      query.category = { $in: [filter] };
+    }
+
+    if (q) {
+      query.$or = [
+        { state: { $regex: q, $options: "i" } },
+        { location: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    const allStays = await Stay.find(query);
+    if (allStays.length === 0) {
+      return res.render("stays/index.ejs", {
+        allStays,
+        noResults: true,
+      });
+    }
+
+    res.render("stays/index.ejs", { allStays });
+  })
+);
 app.use("/stays", staysRouter);
 app.use("/stays/:id/reviews", reviewsRouter);
 app.use("/", usersRouter);

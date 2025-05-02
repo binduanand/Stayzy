@@ -26,53 +26,22 @@ const validateListing = (req, res, next) => {
   }
 };
 
-router
-  .route("/")
-  .get(
-    //explore stays
-    wrapAsync(async (req, res) => {
-      let { filter, q } = req.query;
-      let query = {};
-      if (filter) {
-        query.category = { $in: [filter] };
-      }
+router.route("/").post(
+  isLoggedIn,
+  upload.single("stay[image]"),
+  validateListing,
+  wrapAsync(async (req, res, next) => {
+    const { path: url, filename } = req.file;
+    const newStay = new Stay(req.body.stay);
 
-      if (q) {
-        query.$or = [
-          { state: { $regex: q, $options: "i" } }, 
-          { location: { $regex: q, $options: "i" } }, 
-          { description: { $regex: q, $options: "i" } }, 
-        ];
-      }
+    newStay.owner = req.user._id;
+    newStay.image = { url, filename };
 
-      const allStays = await Stay.find(query);
-      if (allStays.length === 0) {
-        return res.render("stays/index.ejs", {
-          allStays,
-          noResults: true  
-        });
-      }
-
-      res.render("stays/index.ejs", { allStays});
-    })
-  )
-  .post(
-    isLoggedIn,
-    upload.single("stay[image]"),
-    validateListing,
-    wrapAsync(async (req, res, next) => {
-      const { path: url, filename } = req.file;
-      const newStay = new Stay(req.body.stay);
-      
-
-      newStay.owner = req.user._id;
-      newStay.image = { url, filename };
-
-      await newStay.save();
-      req.flash("success", "New Listing Created");
-      res.redirect("/stays");
-    })
-  );
+    await newStay.save();
+    req.flash("success", "New Listing Created");
+    res.redirect("/stays");
+  })
+);
 
 //add newstay form
 router.get(

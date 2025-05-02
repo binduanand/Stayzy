@@ -57,13 +57,17 @@ body {
 }
 
 @media (max-width: 578px) {
+  .searchBar {
+    width: 45%;
+  }
+
   .searchInput {
     width: 30% !important;
     padding: 0 !important;
   }
 
   .searchInput::placeholder {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-align: center;
   }
 }
@@ -86,8 +90,6 @@ body {
   color: black;
   transform: scale(1.1);
 }
-
-
 
 /*Footer*/
 
@@ -215,14 +217,13 @@ body {
   text-align: center;
 }
 
-
 /* booking.ejs */
-.bookingItem{
+.bookingItem {
   display: flex;
 }
 
-@media(max-width:320px){
-  .bookingItemInfo{
+@media (max-width: 320px) {
+  .bookingItemInfo {
     font-size: 0.7rem !important;
   }
 }

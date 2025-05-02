@@ -39,7 +39,7 @@ router.route("/").post(
 
     await newStay.save();
     req.flash("success", "New Listing Created");
-    res.redirect("/stays");
+    res.redirect("/");
   })
 );
 
@@ -62,7 +62,7 @@ router.get(
     const stayToEdit = await Stay.findById(id);
     if (!stayToEdit) {
       req.flash("error", "Listing Does Not Exist");
-      res.redirect("/stays");
+      res.redirect("/");
     }
     res.render("stays/edit.ejs", { stayToEdit });
   })
@@ -85,7 +85,7 @@ router
 
       if (!stay) {
         req.flash("error", "Listing Does Not Exist");
-        res.redirect("/stays");
+        res.redirect("/");
       }
 
       res.render("stays/show.ejs", { stay });
@@ -124,7 +124,7 @@ router
 
       await Stay.findByIdAndDelete(id);
       req.flash("success", "Listing Deleted");
-      res.redirect("/stays");
+      res.redirect("/");
     })
   );
 

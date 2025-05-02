@@ -34,7 +34,6 @@ router.post(
 
     let newBooking = new Booking(req.body.booking);
 
-
     newBooking.user = req.user._id;
     newBooking.stay = id;
 
@@ -45,10 +44,14 @@ router.post(
   })
 );
 
-router.get("/bookings", wrapAsync(async(req,res) => {
-  let allBookings = await Booking.find({user : req.user._id}).populate("stay");
-  res.render("stays/bookings.ejs", {allBookings});
-}))
-
+router.get(
+  "/bookings",
+  wrapAsync(async (req, res) => {
+    let allBookings = await Booking.find({ user: req.user._id }).populate(
+      "stay"
+    );
+    res.render("stays/bookings.ejs", { allBookings });
+  })
+);
 
 module.exports = router;

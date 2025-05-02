@@ -23,7 +23,7 @@ router
             return next(err);
           }
           req.flash("success", "Welcome to Stayzy! Registered Successfully!");
-          let redirectUrl = res.locals.redirectUrl || "/stays";
+          let redirectUrl = res.locals.redirectUrl || "/";
           res.redirect(redirectUrl);
         });
       } catch (err) {
@@ -46,7 +46,7 @@ router
     }),
     async (req, res) => {
       req.flash("success", "Login Successful");
-      let redirectUrl = res.locals.redirectUrl || "/stays";
+      let redirectUrl = res.locals.redirectUrl || "/";
       res.redirect(redirectUrl);
     }
   );

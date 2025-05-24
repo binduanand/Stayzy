@@ -1,7 +1,7 @@
 # 🏡 Stayzy - Stay Rental Platform
 
 
-Stayzy is a vacation rental platform designed to allow users to search for, list, and manage properties. It features secure authentication, image storage with Cloudinary, and form validation using Joi. This platform allows hosts to list their properties and travelers to find the perfect place to stay.
+Stayzy is a stay rental platform designed to allow users to search for, list, and manage properties. It features secure authentication, image storage with Cloudinary, and form validation using Joi. This platform allows hosts to list their properties and travelers to find the perfect place to stay.
 
 ## 🚀Technologies Used:
 
